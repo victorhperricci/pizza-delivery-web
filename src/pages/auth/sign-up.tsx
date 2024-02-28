@@ -1,4 +1,5 @@
 import { Label } from '@radix-ui/react-label'
+import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -7,6 +8,8 @@ import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+
+import { registerRestaurant } from '../../api/register-restaurant'
 
 const signUpForm = z.object({
   restaurantName: z.string(),
@@ -25,14 +28,23 @@ export function SignUp() {
   } = useForm<SignUpForm>()
   const navigate = useNavigate()
 
+  const { mutateAsync: registerRestaurantFn } = useMutation({
+    mutationFn: registerRestaurant,
+  })
+
   async function handleSignUp(data: SignUpForm) {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      console.log(data)
+      await registerRestaurantFn({
+        email: data.email,
+        managerName: data.managerName,
+        phone: data.phone,
+        restaurantName: data.restaurantName,
+      })
+
       toast.success('Restaurante cadastrado com sucesso!', {
         action: {
           label: 'Login',
-          onClick: () => navigate('/sign-in'),
+          onClick: () => navigate(`/sign-in?email=${data.email}`),
         },
         style: {
           backgroundColor: 'var(--color-success)',
@@ -40,6 +52,7 @@ export function SignUp() {
         },
       })
     } catch (err) {
+      // console.log(err)
       toast.error('Erro ao cadastrar restaurante.')
     }
   }
@@ -87,7 +100,7 @@ export function SignUp() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">E-mail</Label>
+              <Label htmlFor="phone">Seu celular</Label>
               <Input type="tel" id="phone" {...register('phone')} />
             </div>
 

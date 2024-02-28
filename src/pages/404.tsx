@@ -7,7 +7,7 @@ export function NotFound() {
       <p className="text-accent-foreground">
         Voltar para o{' '}
         <Link
-          to="/dashboard"
+          to="/"
           className="text-sky-500 duration-300 hover:brightness-75 dark:text-sky-400"
         >
           Dashboard
