@@ -10,7 +10,7 @@ export function NavLink(props: NavLinkProps) {
   return (
     <Link
       data-active={isActive}
-      className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-all hover:text-foreground data-[active=true]:text-foreground"
+      className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground data-[active=true]:text-rose-500"
       {...props}
     />
   )

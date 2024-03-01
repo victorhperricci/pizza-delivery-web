@@ -1,3 +1,6 @@
+import dayjs from 'dayjs'
+import ptBr from 'dayjs/locale/pt-br'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { ArrowRight, Search, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -5,14 +8,26 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 
 import { OrderDetails } from './order-details'
+import { OrderStatus } from './order-status'
 
-interface OrderTableRowProps {
-  key: number
+dayjs.extend(relativeTime)
+dayjs.locale(ptBr)
+
+interface OrderProps {
+  orderId: string
+  createdAt: Date
+  status: 'pending' | 'canceled' | 'processing' | 'delivering' | 'delivered'
+  customerName: string
+  total: number
 }
 
-export function OrderTableRow({ key }: OrderTableRowProps) {
+interface OrderTableRowProps {
+  order: OrderProps
+}
+
+export function OrderTableRow({ order }: OrderTableRowProps) {
   return (
-    <TableRow key={key}>
+    <TableRow>
       <TableCell>
         <Dialog>
           <DialogTrigger asChild>
@@ -27,21 +42,25 @@ export function OrderTableRow({ key }: OrderTableRowProps) {
       </TableCell>
 
       <TableCell className="font-mono text-xs font-medium">
-        2134245rwefwes
+        {order.orderId}
       </TableCell>
 
-      <TableCell className="text-muted-foreground">há 15 minutos</TableCell>
+      <TableCell className="text-muted-foreground">
+        {dayjs(order.createdAt).fromNow()}
+      </TableCell>
 
       <TableCell>
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-slate-400" />
-          <span className="font-medium text-muted-foreground">Pendente</span>
-        </div>
+        <OrderStatus status={order.status} />
       </TableCell>
 
-      <TableCell className="font-medium">Victor Hugo Alves Perricci</TableCell>
+      <TableCell className="font-medium">{order.customerName}</TableCell>
 
-      <TableCell className="font-medium">R$ 1.500,00</TableCell>
+      <TableCell className="font-medium">
+        {order.total.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+        })}
+      </TableCell>
 
       <TableCell>
         <Button variant="outline" size="xs">
