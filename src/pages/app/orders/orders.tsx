@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 
-import { getOrders } from '@/api/get-orders'
+import { getOrders } from '@/api/orders/get-orders'
 import { Pagination } from '@/components/pagination'
 import {
   Table,
@@ -11,14 +13,40 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { OrderTableFilters } from './order-table-filters'
+import { OrderFiltersSchema, OrderTableFilters } from './order-table-filters'
 import { OrderTableRow } from './order-table-row'
+import { OrderTableSkeleton } from './order-table-skeleton'
 
 export function Orders() {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const orderId = searchParams.get('orderId')?.trim()
+  const customerName = searchParams.get('customerName')?.trim()
+  const status = searchParams.get('status') as OrderFiltersSchema['status']
+
+  const pageIndex = z.coerce
+    .number()
+    .transform((page) => page - 1)
+    .parse(searchParams.get('page') ?? '1')
+
   const { data: result } = useQuery({
-    queryKey: ['orders'],
-    queryFn: getOrders,
+    queryKey: ['orders', pageIndex, orderId, customerName, status],
+    queryFn: () =>
+      getOrders({
+        pageIndex,
+        perPage: 9,
+        orderId,
+        customerName,
+        status: status === 'all' ? null : status,
+      }),
   })
+
+  function handlePageChange(pageIndex: number) {
+    setSearchParams((prev) => {
+      prev.set('page', String(pageIndex + 1))
+      return prev
+    })
+  }
 
   return (
     <>
@@ -43,15 +71,25 @@ export function Orders() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {result &&
+                {result ? (
                   result.orders.map((order) => (
                     <OrderTableRow key={order.orderId} order={order} />
-                  ))}
+                  ))
+                ) : (
+                  <OrderTableSkeleton />
+                )}
               </TableBody>
             </Table>
           </div>
 
-          <Pagination pageIndex={0} perPage={10} totalCount={105} />
+          {result && (
+            <Pagination
+              pageIndex={result.meta.pageIndex}
+              perPage={result.meta.perPage}
+              totalCount={result.meta.totalCount}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </>
