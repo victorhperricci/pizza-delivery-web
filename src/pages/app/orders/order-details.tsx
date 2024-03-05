@@ -20,7 +20,7 @@ import { formatCurrency } from '@/utils/formatCurrency'
 import { formatDateToNow } from '@/utils/formatDateToNow'
 
 import { OrderDetailsSkeleton } from './order-details-skeleton'
-import { OrderStatus } from './order-status'
+import { OrderStatus } from './order-status/order-status'
 
 export interface OrderDetailsProps {
   orderId: string

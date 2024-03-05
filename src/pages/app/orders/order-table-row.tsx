@@ -16,7 +16,7 @@ import { TableCell, TableRow } from '@/components/ui/table'
 import { formatCurrency } from '@/utils/formatCurrency'
 
 import { OrderDetails } from './order-details'
-import { OrderStatus, OrderStatusProps } from './order-status'
+import { OrderStatus, OrderStatusProps } from './order-status/order-status'
 
 dayjs.extend(relativeTime)
 dayjs.locale(ptBr)
