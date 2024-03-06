@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
-import { signIn } from '../../api/sign-in'
+import { signIn } from '../../../api/sign-in'
 
 const signInForm = z.object({
   email: z.string().email(),

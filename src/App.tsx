@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/sonner'
 
 import { router } from './routes'
 
-const client = new QueryClient()
+export const client = new QueryClient()
 
 export function App() {
   return (

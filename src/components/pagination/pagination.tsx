@@ -5,7 +5,7 @@ import {
   ChevronsRight,
 } from 'lucide-react'
 
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 
 export interface PaginationProps {
   pageIndex: number
@@ -38,6 +38,7 @@ export function Pagination({
             variant="outline"
             className="h-8 w-8 p-0"
             disabled={pageIndex === 0}
+            data-testid="first-page-button"
           >
             <ChevronsLeft className="h-4 w-4" />
             <span className="sr-only">Primeira página</span>
@@ -47,6 +48,7 @@ export function Pagination({
             variant="outline"
             className="h-8 w-8 p-0"
             disabled={pageIndex === 0}
+            data-testid="previous-page-button"
           >
             <ChevronLeft className="h-4 w-4" />
             <span className="sr-only">Página anterior</span>
@@ -56,6 +58,7 @@ export function Pagination({
             variant="outline"
             className="h-8 w-8 p-0"
             disabled={pageIndex === pages - 1}
+            data-testid="next-page-button"
           >
             <ChevronRight className="h-4 w-4" />
             <span className="sr-only">Próxima página</span>
@@ -65,6 +68,7 @@ export function Pagination({
             variant="outline"
             className="h-8 w-8 p-0"
             disabled={pageIndex === pages - 1}
+            data-testid="last-page-button"
           >
             <ChevronsRight className="h-4 w-4" />
             <span className="sr-only">Última página</span>
