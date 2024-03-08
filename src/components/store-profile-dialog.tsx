@@ -52,10 +52,10 @@ export function StoreProfileDialog() {
 
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationFn: updateProfile,
-    onMutate: async ({ name, description }: StoreProfileSchema) => {
+    onMutate: async ({ name, description }) => {
       const { cached } = updateManagedRestaurantCache({
         name,
-        description,
+        description: description ?? '',
       })
 
       if (cached) {
@@ -96,7 +96,7 @@ export function StoreProfileDialog() {
     try {
       await updateProfileFn({
         name: values.name,
-        description: values.description,
+        description: values.description ?? '',
       })
 
       toast.success('Perfil atualizado com sucesso!')

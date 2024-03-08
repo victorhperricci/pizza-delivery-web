@@ -12,7 +12,6 @@ export interface GetOrdersQuery {
     | 'processing'
     | 'delivering'
     | 'delivered'
-    | null
 }
 
 export interface GetOrdersResponse {

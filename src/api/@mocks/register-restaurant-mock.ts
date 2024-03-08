@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw'
 import { RegisterRestaurantProps } from '../register-restaurant'
 
 export const registerRestaurantMock = http.post<never, RegisterRestaurantProps>(
-  '/register-restaurant',
+  '/restaurants',
   async ({ request }) => {
     const { restaurantName } = await request.json()
 

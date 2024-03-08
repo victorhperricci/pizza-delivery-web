@@ -5,8 +5,8 @@ import { AuthLayout } from './pages/_layouts/auth'
 import { NotFound } from './pages/404'
 import { Dashboard } from './pages/app/dashboard/dashboard'
 import { Orders } from './pages/app/orders/orders'
-import { SignUp } from './pages/auth/sign-up'
 import { SignIn } from './pages/auth/sign-in/sing-in'
+import { SignUp } from './pages/auth/sign-up'
 import { Error } from './pages/error'
 
 export const router = createBrowserRouter([
