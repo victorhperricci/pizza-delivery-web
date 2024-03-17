@@ -26,6 +26,6 @@
       ]
     }
   },
-  "include": ["src", "test"],
+  "include": ["src", "test", "test/.e2e-spec.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

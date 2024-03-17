@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Label } from '@radix-ui/react-label'
 import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
@@ -12,10 +13,15 @@ import { Input } from '@/components/ui/input'
 import { registerRestaurant } from '../../api/register-restaurant'
 
 const signUpForm = z.object({
-  restaurantName: z.string(),
-  managerName: z.string(),
-  phone: z.string(),
-  email: z.string().email(),
+  restaurantName: z.string().min(1, 'Nome do restaurante é obrigatório'),
+  managerName: z.string().min(1, 'Nome do gerente é obrigatório'),
+  phone: z
+    .string()
+    .min(1, 'Telefone é obrigatório')
+    .regex(/^\d{11}$/, 'Telefone inválido'),
+  email: z.string().min(1, 'E-mail é obrigatório').email({
+    message: 'E-mail inválido',
+  }),
 })
 
 type SignUpForm = z.infer<typeof signUpForm>
@@ -24,8 +30,10 @@ export function SignUp() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<SignUpForm>()
+    formState: { isSubmitting, errors },
+  } = useForm<SignUpForm>({
+    resolver: zodResolver(signUpForm),
+  })
   const navigate = useNavigate()
 
   const { mutateAsync: registerRestaurantFn } = useMutation({
@@ -57,6 +65,8 @@ export function SignUp() {
     }
   }
 
+  console.log(errors)
+
   return (
     <>
       <Helmet title="Cadastro" />
@@ -83,6 +93,11 @@ export function SignUp() {
                 id="restaurantName"
                 {...register('restaurantName')}
               />
+              {errors.restaurantName && (
+                <p className="text-xs text-rose-600">
+                  {errors.restaurantName.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -92,16 +107,27 @@ export function SignUp() {
                 id="managerName"
                 {...register('managerName')}
               />
+              {errors.managerName && (
+                <p className="text-xs text-rose-600">
+                  {errors.managerName.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="email">E-mail</Label>
               <Input type="email" id="email" {...register('email')} />
+              {errors.email && (
+                <p className="text-xs text-rose-600">{errors.email.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="phone">Seu celular</Label>
               <Input type="tel" id="phone" {...register('phone')} />
+              {errors.phone && (
+                <p className="text-xs text-rose-600">{errors.phone.message}</p>
+              )}
             </div>
 
             <Button

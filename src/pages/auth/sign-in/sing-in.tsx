@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Label } from '@radix-ui/react-label'
 import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
@@ -12,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { signIn } from '../../../api/sign-in'
 
 const signInForm = z.object({
-  email: z.string().email(),
+  email: z.string().min(1, 'E-mail é obrigatório').email('E-mail inválido'),
 })
 
 type SignInForm = z.infer<typeof signInForm>
@@ -23,8 +24,9 @@ export function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<SignInForm>({
+    resolver: zodResolver(signInForm),
     defaultValues: {
       email: searchParams.get('email') ?? '',
     },
@@ -77,6 +79,9 @@ export function SignIn() {
             <div className="space-y-2">
               <Label htmlFor="email">E-mail</Label>
               <Input type="email" id="email" {...register('email')} />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
             </div>
 
             <Button

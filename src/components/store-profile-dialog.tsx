@@ -140,14 +140,17 @@ export function StoreProfileDialog() {
               Cancelar
             </Button>
           </DialogClose>
-          <Button
-            variant="success"
-            type="submit"
-            onClick={() => {}}
-            disabled={isSubmitting}
-          >
-            Salvar
-          </Button>
+
+          <DialogClose asChild>
+            <Button
+              variant="success"
+              type="submit"
+              onClick={() => {}}
+              disabled={isSubmitting}
+            >
+              Salvar
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </form>
     </DialogContent>

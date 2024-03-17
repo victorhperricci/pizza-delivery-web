@@ -1,24 +1,12 @@
 import { http, HttpResponse } from 'msw'
 
-import {
-  GetDailyRevenueInPeriodQuery,
-  GetDailyRevenueInPeriodResponse,
-} from '@/api/metrics/get-daily-revenue-in-period'
+import { GetDailyRevenueInPeriodResponse } from '@/api/metrics/get-daily-revenue-in-period'
 
 export const getDailyRevenueInPeriodMock = http.get<
-  GetDailyRevenueInPeriodQuery,
+  never,
   never,
   GetDailyRevenueInPeriodResponse
->('/metrics/daily-receipt-in-period', ({ params }) => {
-  const { from, to } = params
-
-  if (!from || !to) {
-    return new HttpResponse(null, {
-      status: 400,
-      statusText: 'Invalid "from" and "to" parameters',
-    })
-  }
-
+>('/metrics/daily-receipt-in-period', () => {
   return HttpResponse.json([
     { date: '2024-02-01', receipt: 4000 },
     { date: '2024-02-02', receipt: 8000 },
